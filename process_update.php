@@ -217,131 +217,132 @@ $message = $error_messages[$error] ?? '';
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile – Home-Start</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Home-Start Volunteer Portal</h1>
-    <h2>Edit Your Profile</h2>
-    <p><a href="home.php">← Back to Dashboard</a></p>
+
+<div class="page-wrapper" style="padding:0;">
+
+    <div class="top-nav">
+        <span class="nav-brand">Home-Start Volunteer Portal</span>
+        <a href="home.php">&larr; Back to Dashboard</a>
+    </div>
+
+    <div style="padding:1.5rem;">
+
+    <img src="Home-Start-Logo.png" alt="Home-Start" class="logo" style="width:12%;margin-bottom:1rem;">
+    <h1>Edit Your Profile</h1>
+    <h2>Your current details are pre-filled below</h2>
 
     <?php if ($message): ?>
-        <p style="color:red;"><?= $message ?></p>
+        <div class="alert alert-error"><?= $message ?></div>
     <?php endif; ?>
 
     <form method="POST" action="process_update.php">
         <input type="hidden" name="csrf_token"
                value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
 
-        <!-- Personal Info — pre-filled with current DB values -->
+        <!-- PERSONAL INFORMATION — pre-filled -->
         <fieldset>
             <legend>Personal Information</legend>
-
-            <label for="forename">First Name: *</label><br>
-            <input type="text" id="forename" name="forename"
-                   value="<?= htmlspecialchars($volunteer['volunteer_forename'] ?? '') ?>"
-                   maxlength="50" required><br><br>
-
-            <label for="surname">Last Name: *</label><br>
-            <input type="text" id="surname" name="surname"
-                   value="<?= htmlspecialchars($volunteer['volunteer_surname'] ?? '') ?>"
-                   maxlength="50" required><br><br>
-
-            <label for="dob">Date of Birth (DD/MM/YYYY): *</label><br>
-            <input type="text" id="dob" name="dob"
-                   value="<?= htmlspecialchars($dob_display) ?>"
-                   maxlength="10" required><br>
+            <div class="form-group">
+                <label for="forename">First Name *</label>
+                <input type="text" id="forename" name="forename"
+                       value="<?= htmlspecialchars($volunteer['volunteer_forename'] ?? '') ?>"
+                       maxlength="50" required>
+            </div>
+            <div class="form-group">
+                <label for="surname">Last Name *</label>
+                <input type="text" id="surname" name="surname"
+                       value="<?= htmlspecialchars($volunteer['volunteer_surname'] ?? '') ?>"
+                       maxlength="50" required>
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth * &nbsp;<small style="font-weight:normal;">(DD/MM/YYYY)</small></label>
+                <input type="text" id="dob" name="dob"
+                       value="<?= htmlspecialchars($dob_display) ?>"
+                       placeholder="DD/MM/YYYY" maxlength="10" required>
+            </div>
         </fieldset>
 
-        <br>
-
-        <!-- Skills — pre-tick current selections -->
+        <!-- SKILLS — pre-ticked -->
         <fieldset>
             <legend>Skills</legend>
-            <?php foreach ($all_skills as $skill): ?>
-                <label>
-                    <input type="checkbox"
-                           name="skill_ids[]"
-                           value="<?= (int)$skill['skill_id'] ?>"
-                           <?= in_array($skill['skill_id'], $current_skill_ids) ? 'checked' : '' ?>>
-                    <?= htmlspecialchars($skill['skill_name']) ?>
-                </label><br>
-            <?php endforeach; ?>
+            <div class="checkbox-list">
+                <?php foreach ($all_skills as $skill): ?>
+                    <label>
+                        <input type="checkbox" name="skill_ids[]"
+                               value="<?= (int)$skill['skill_id'] ?>"
+                               <?= in_array($skill['skill_id'], $current_skill_ids) ? 'checked' : '' ?>>
+                        <?= htmlspecialchars($skill['skill_name']) ?>
+                    </label>
+                <?php endforeach; ?>
+            </div>
         </fieldset>
 
-        <br>
-
-        <!-- Qualifications -->
+        <!-- QUALIFICATIONS — pre-ticked -->
         <fieldset>
             <legend>Qualifications</legend>
-            <?php foreach ($all_quals as $qual): ?>
-                <label>
-                    <input type="checkbox"
-                           name="qualification_ids[]"
-                           value="<?= (int)$qual['qualification_id'] ?>"
-                           <?= in_array($qual['qualification_id'], $current_qual_ids) ? 'checked' : '' ?>>
-                    <?= htmlspecialchars($qual['qualification_name']) ?>
-                </label><br>
-            <?php endforeach; ?>
+            <div class="checkbox-list">
+                <?php foreach ($all_quals as $qual): ?>
+                    <label>
+                        <input type="checkbox" name="qualification_ids[]"
+                               value="<?= (int)$qual['qualification_id'] ?>"
+                               <?= in_array($qual['qualification_id'], $current_qual_ids) ? 'checked' : '' ?>>
+                        <?= htmlspecialchars($qual['qualification_name']) ?>
+                    </label>
+                <?php endforeach; ?>
+            </div>
         </fieldset>
 
-        <br>
-
-        <!-- Transport -->
+        <!-- TRANSPORT — pre-ticked -->
         <fieldset>
-            <legend>Transport Modes * (select at least one)</legend>
-            <?php foreach ($all_transports as $transport): ?>
-                <label>
-                    <input type="checkbox"
-                           name="transport_ids[]"
-                           value="<?= (int)$transport['transport_id'] ?>"
-                           <?= in_array($transport['transport_id'], $current_transport_ids) ? 'checked' : '' ?>>
-                    <?= htmlspecialchars($transport['transport_name']) ?>
-                </label><br>
-            <?php endforeach; ?>
+            <legend>Transport Modes * &nbsp;<span style="font-weight:normal;font-size:0.8rem;color:#ea580d;">At least one required</span></legend>
+            <div class="checkbox-list">
+                <?php foreach ($all_transports as $transport): ?>
+                    <label>
+                        <input type="checkbox" name="transport_ids[]"
+                               value="<?= (int)$transport['transport_id'] ?>"
+                               <?= in_array($transport['transport_id'], $current_transport_ids) ? 'checked' : '' ?>>
+                        <?= htmlspecialchars($transport['transport_name']) ?>
+                    </label>
+                <?php endforeach; ?>
+            </div>
         </fieldset>
 
-        <br>
-
-        <!-- Availability — pre-tick days and pre-fill times -->
+        <!-- AVAILABILITY — pre-ticked with existing times -->
         <fieldset>
-            <legend>Availability</legend>
-            <table>
+            <legend>Availability &nbsp;<span style="font-weight:normal;font-size:0.8rem;color:#888;">Update your available days and hours</span></legend>
+            <table class="avail-table">
                 <thead>
                     <tr><th>Day</th><th>Available?</th><th>From</th><th>To</th></tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($day_names as $i => $day_name): ?>
-                    <?php
+                    <?php foreach ($day_names as $i => $day_name):
                         $has_slot  = isset($current_avail[$i]);
                         $start_val = $has_slot ? substr($current_avail[$i]['start_time'], 0, 5) : '09:00';
                         $end_val   = $has_slot ? substr($current_avail[$i]['end_time'],   0, 5) : '17:00';
                     ?>
                     <tr>
                         <td><?= htmlspecialchars($day_name) ?></td>
-                        <td>
-                            <input type="checkbox"
-                                   name="avail[<?= $i ?>][enabled]"
-                                   value="1"
-                                   <?= $has_slot ? 'checked' : '' ?>>
-                        </td>
-                        <td>
-                            <input type="time"
-                                   name="avail[<?= $i ?>][start]"
-                                   value="<?= htmlspecialchars($start_val) ?>">
-                        </td>
-                        <td>
-                            <input type="time"
-                                   name="avail[<?= $i ?>][end]"
-                                   value="<?= htmlspecialchars($end_val) ?>">
-                        </td>
+                        <td><input type="checkbox" name="avail[<?= $i ?>][enabled]" value="1" <?= $has_slot ? 'checked' : '' ?>></td>
+                        <td><input type="time" name="avail[<?= $i ?>][start]" value="<?= htmlspecialchars($start_val) ?>"></td>
+                        <td><input type="time" name="avail[<?= $i ?>][end]"   value="<?= htmlspecialchars($end_val) ?>"></td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
         </fieldset>
 
-        <br>
-        <button type="submit">Update Profile</button>
+        <div class="btn-row">
+            <button type="submit" class="btn btn-primary">Update Profile</button>
+            <a href="home.php" class="btn btn-outline">Cancel</a>
+        </div>
+
     </form>
+    </div>
+</div>
 </body>
 </html>
